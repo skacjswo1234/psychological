@@ -1,0 +1,379 @@
+/* Adult Signal 프로젝트 전용 CSS */
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+
+:root {
+  --bg: #050509;
+  --card: #101018;
+  --accent: #d5b25a; /* Gold */
+  --accent-soft: rgba(213, 178, 90, 0.15);
+  --text-main: #f5f5f7;
+  --text-sub: #a3a3b0;
+  --danger: #ff5a5a;
+  --border: rgba(255, 255, 255, 0.08);
+}
+
+.adult-signal-app {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: radial-gradient(circle at top, #1a1a2e 0%, #000000 100%);
+  color: var(--text-main);
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px 12px 60px;
+}
+
+.adult-signal-app .app {
+  width: 100%;
+  max-width: 720px;
+}
+
+/* 메인 카드 스타일 */
+.adult-signal-app .card {
+  background: linear-gradient(160deg, #151520, #08080c);
+  border-radius: 20px;
+  padding: 24px 20px 32px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.7), 0 0 0 1px var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.adult-signal-app .card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 200px;
+  background: radial-gradient(circle at top, rgba(213, 178, 90, 0.15), transparent 70%);
+  pointer-events: none;
+}
+
+.adult-signal-app .badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent);
+  background: rgba(213, 178, 90, 0.1);
+  border: 1px solid rgba(213, 178, 90, 0.3);
+  padding: 4px 10px;
+  border-radius: 100px;
+  margin-bottom: 12px;
+  letter-spacing: 0.5px;
+}
+
+.adult-signal-app .badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 6px var(--accent);
+}
+
+.adult-signal-app h1 {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  line-height: 1.3;
+}
+
+.adult-signal-app .subtitle {
+  font-size: 14px;
+  color: var(--text-sub);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.adult-signal-app .divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+  margin: 24px 0;
+}
+
+.adult-signal-app .section-header {
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.adult-signal-app .section-header::before {
+  content: '';
+  display: block;
+  width: 4px;
+  height: 16px;
+  background: var(--accent);
+  border-radius: 2px;
+}
+
+/* 질문 리스트 스타일 */
+.adult-signal-app .question-item {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.adult-signal-app .q-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 11px;
+  color: var(--text-sub);
+}
+
+.adult-signal-app .q-num { 
+  color: var(--accent); 
+  font-weight: bold; 
+}
+
+.adult-signal-app .q-text {
+  font-size: 15px;
+  line-height: 1.5;
+  margin-bottom: 14px;
+  font-weight: 500;
+}
+
+/* 1~4점 선택지 스타일 */
+.adult-signal-app .scale-container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.adult-signal-app .scale-labels {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 10px;
+  font-size: 10px;
+  color: var(--text-sub);
+  opacity: 0.7;
+}
+
+.adult-signal-app .scale-options {
+  display: flex;
+  gap: 8px;
+}
+
+.adult-signal-app .radio-label {
+  flex: 1;
+  position: relative;
+}
+
+.adult-signal-app .radio-label input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.adult-signal-app .radio-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 36px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-sub);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.adult-signal-app .radio-label input:checked + .radio-btn {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: 0 0 10px rgba(213, 178, 90, 0.2);
+}
+
+.adult-signal-app .btn-primary {
+  width: 100%;
+  background: linear-gradient(90deg, #cfac56, #f5d888, #cfac56);
+  border: none;
+  padding: 16px;
+  border-radius: 12px;
+  color: #000;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 20px;
+  box-shadow: 0 4px 15px rgba(213, 178, 90, 0.3);
+  transition: transform 0.2s;
+}
+
+.adult-signal-app .btn-primary:active {
+  transform: scale(0.98);
+}
+
+.adult-signal-app .error-msg {
+  color: var(--danger);
+  font-size: 12px;
+  text-align: center;
+  margin-top: 10px;
+  display: block;
+}
+
+/* 결과 페이지 스타일 */
+.adult-signal-app .result-box {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--accent);
+  border-radius: 16px;
+  padding: 24px;
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.adult-signal-app .result-box::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 4px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+}
+
+.adult-signal-app .type-tag {
+  display: inline-block;
+  background: var(--accent);
+  color: #000;
+  padding: 4px 12px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.adult-signal-app .result-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.adult-signal-app .result-keywords {
+  font-size: 13px;
+  color: var(--accent);
+  margin-bottom: 24px;
+  opacity: 0.9;
+}
+
+.adult-signal-app .analysis-block {
+  margin-bottom: 24px;
+}
+
+.adult-signal-app .analysis-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.adult-signal-app .analysis-content {
+  font-size: 13px;
+  line-height: 1.7;
+  color: #ccc;
+  background: rgba(0,0,0,0.2);
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.adult-signal-app .analysis-content.solution-text {
+  color: var(--accent);
+  font-weight: bold;
+}
+
+.adult-signal-app .analysis-list {
+  list-style: none;
+  padding: 0;
+}
+
+.adult-signal-app .analysis-list li {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #ccc;
+  margin-bottom: 6px;
+  padding-left: 12px;
+  position: relative;
+}
+
+.adult-signal-app .analysis-list li::before {
+  content: "•";
+  color: var(--accent);
+  position: absolute;
+  left: 0;
+}
+
+.adult-signal-app .score-chart {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  background: rgba(0,0,0,0.3);
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.adult-signal-app .chart-bar-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.adult-signal-app .chart-bar-bg {
+  width: 8px;
+  height: 60px;
+  background: #333;
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+
+.adult-signal-app .chart-bar-fill {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background: var(--accent);
+  border-radius: 4px;
+  transition: height 1s ease;
+}
+
+.adult-signal-app .chart-label {
+  font-size: 10px;
+  color: var(--text-sub);
+}
+
+.adult-signal-app .btn-share {
+  width: 100%;
+  background: #222;
+  border: 1px solid #444;
+  color: #fff;
+  padding: 14px;
+  border-radius: 12px;
+  margin-top: 10px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.adult-signal-app .btn-retry {
+  text-align: center;
+  margin-top: 16px;
+  font-size: 12px;
+  color: var(--text-sub);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
