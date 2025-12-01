@@ -103,12 +103,18 @@ const AdultSignalTest = () => {
 
     // 최고 점수 타입 찾기
     let maxScore = -1;
-    let maxType = '';
+    let maxType = 'S'; // 기본값 설정
     for (const type in newScores) {
       if (newScores[type] > maxScore) {
         maxScore = newScores[type];
         maxType = type;
       }
+    }
+
+    // 모든 점수가 0이거나 maxType이 없으면 에러 처리
+    if (maxScore <= 0 || !maxType) {
+      setError(true);
+      return;
     }
 
     setScores(newScores);

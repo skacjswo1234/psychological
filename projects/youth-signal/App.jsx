@@ -65,8 +65,21 @@ const YouthSignalTest = () => {
 
   // 결과 데이터 계산
   const getResultData = () => {
-    // 최고 점수 유형 찾기 (동점일 경우 순서대로 우선순위)
-    const maxType = Object.keys(scores).reduce((a, b) => scores[a] >= scores[b] ? a : b);
+    // 모든 점수가 0이면 결과를 계산하지 않음
+    const totalScore = Object.values(scores).reduce((sum, val) => sum + val, 0);
+    if (totalScore === 0) {
+      return null;
+    }
+
+    // 최고 점수 유형 찾기 (동점일 경우 더 큰 점수를 가진 타입 선택)
+    let maxScore = -1;
+    let maxType = 'S';
+    for (const [type, score] of Object.entries(scores)) {
+      if (score > maxScore) {
+        maxScore = score;
+        maxType = type;
+      }
+    }
     
     const types = {
       S: {
@@ -118,9 +131,11 @@ const YouthSignalTest = () => {
     return types[maxType] || types.S;
   };
 
-  const result = getResultData();
+  // 결과는 step이 'result'일 때만 계산
+  const result = step === 'result' ? getResultData() : null;
 
   const copyResult = () => {
+    if (!result) return;
     const text = `[청소년 시그널 타입 분석]\n결과: ${result.label}\n키워드: ${result.keyword}\n\n솔루션: ${result.solution}`;
     navigator.clipboard.writeText(text);
     alert("결과가 복사되었습니다.");
@@ -221,7 +236,7 @@ const YouthSignalTest = () => {
         )}
 
         {/* STEP 4: RESULT */}
-        {step === 'result' && (
+        {step === 'result' && result && (
           <div className="p-6 animate-fade-in pb-10 relative z-10 overflow-y-auto h-full">
             <div className="mb-6 text-center">
                <span className="inline-block px-3 py-1 rounded-full bg-[#d5b25a]/20 text-[#d5b25a] text-[10px] font-bold border border-[#d5b25a]/30 mb-4">ANALYSIS REPORT</span>
