@@ -931,35 +931,16 @@ function LoadingSection({ onComplete }) {
 function ResultReport({ typeKey, name, scores, onRestart }) {
   const result = RESULT_DATA[typeKey];
   const [showShare, setShowShare] = useState(false);
-  const [shareType, setShareType] = useState(''); // 'test' or 'result'
-
-  const handleCopyTestLink = () => {
-    const testUrl = window.location.origin + window.location.pathname;
-    const text = `36가지 데이터 SOS 스캐너 테스트 우리아이도 해보기\n\n${testUrl}`;
-    const textArea = document.createElement('textarea');
-    textArea.value = text;
-    document.body.appendChild(textArea);
-    textArea.select();
-    try {
-      document.execCommand('copy');
-      setShareType('test');
-      setShowShare(true);
-      setTimeout(() => setShowShare(false), 3000);
-    } catch (err) {
-      // ignore
-    }
-    document.body.removeChild(textArea);
-  };
 
   const handleCopyResult = () => {
-    const text = `[학생 SOS 시그널 스캐너 결과]\n이름: ${name}\n유형: ${result.name}\n\n"${result.desc}"\n\n36가지 데이터 SOS 스캔 결과 확인하기`;
+    const testUrl = 'https://xn--2i0bs2d62hz6mc4dvpt.com/project/signal-sos';
+    const text = `[학생 SOS 시그널 스캐너 결과]\n이름: ${name}\n유형: ${result.name}\n\n"${result.desc}"\n\n36가지 데이터 SOS 스캔 결과 확인하기\n\n${testUrl}`;
     const textArea = document.createElement('textarea');
     textArea.value = text;
     document.body.appendChild(textArea);
     textArea.select();
     try {
       document.execCommand('copy');
-      setShareType('result');
       setShowShare(true);
       setTimeout(() => setShowShare(false), 3000);
     } catch (err) {
@@ -1076,12 +1057,6 @@ function ResultReport({ typeKey, name, scores, onRestart }) {
           <ArrowLeft size={18} /> 다시하기
         </button>
         <button
-          onClick={handleCopyTestLink}
-          className="px-6 py-3 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold flex items-center justify-center gap-2 shadow-lg"
-        >
-          <Share2 size={18} /> 테스트 링크 공유
-        </button>
-        <button
           onClick={handleCopyResult}
           className="px-6 py-3 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold flex items-center justify-center gap-2 shadow-lg"
         >
@@ -1093,9 +1068,7 @@ function ResultReport({ typeKey, name, scores, onRestart }) {
         <div className="fixed inset-0 flex items-center justify-center z-50 animate-fade-in bg-black/80">
           <div className="bg-gray-900 border border-cyan-500/50 p-6 rounded-2xl flex items-center gap-3 shadow-2xl">
             <CheckCircle className="text-cyan-400" />{' '}
-            <span className="font-bold text-white">
-              {shareType === 'test' ? '테스트 링크가 복사되었습니다.' : '결과 리포트가 복사되었습니다.'}
-            </span>
+            <span className="font-bold text-white">결과 리포트가 복사되었습니다.</span>
           </div>
         </div>
       )}
