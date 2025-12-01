@@ -101,12 +101,23 @@ const AdultSignalTest = () => {
       }
     });
 
-    // 최고 점수 타입 찾기
+    // 디버깅: 점수 확인
+    console.log('계산된 점수:', newScores);
+    console.log('답변 데이터:', answers);
+
+    // 최고 점수 타입 찾기 (명시적으로 순서 보장)
+    const scoreEntries = [
+      ['S', newScores.S],
+      ['A', newScores.A],
+      ['B', newScores.B],
+      ['C', newScores.C]
+    ];
+    
     let maxScore = -1;
-    let maxType = 'S'; // 기본값 설정
-    for (const type in newScores) {
-      if (newScores[type] > maxScore) {
-        maxScore = newScores[type];
+    let maxType = null;
+    for (const [type, score] of scoreEntries) {
+      if (score > maxScore) {
+        maxScore = score;
         maxType = type;
       }
     }
@@ -116,6 +127,8 @@ const AdultSignalTest = () => {
       setError(true);
       return;
     }
+
+    console.log('최종 결과 타입:', maxType, '점수:', maxScore);
 
     setScores(newScores);
     setResultType(maxType);

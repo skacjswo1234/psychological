@@ -38,7 +38,12 @@ const YouthSignalTest = () => {
 
   const handleAnswer = (points) => {
     const currentType = questions[currentQ].type;
-    setScores(prev => ({ ...prev, [currentType]: prev[currentType] + points }));
+    console.log(`질문 ${currentQ + 1}: 타입=${currentType}, 점수=${points}`);
+    setScores(prev => {
+      const newScores = { ...prev, [currentType]: prev[currentType] + points };
+      console.log('업데이트된 점수:', newScores);
+      return newScores;
+    });
     
     if (currentQ < questions.length - 1) {
       setCurrentQ(currentQ + 1);
@@ -71,14 +76,30 @@ const YouthSignalTest = () => {
       return null;
     }
 
-    // 최고 점수 유형 찾기 (동점일 경우 더 큰 점수를 가진 타입 선택)
+    // 디버깅: 점수 확인
+    console.log('청소년 시그널 계산된 점수:', scores);
+
+    // 최고 점수 유형 찾기 (명시적으로 순서 보장)
+    const scoreEntries = [
+      ['S', scores.S],
+      ['A', scores.A],
+      ['B', scores.B],
+      ['C', scores.C]
+    ];
+    
     let maxScore = -1;
-    let maxType = 'S';
-    for (const [type, score] of Object.entries(scores)) {
+    let maxType = null;
+    for (const [type, score] of scoreEntries) {
       if (score > maxScore) {
         maxScore = score;
         maxType = type;
       }
+    }
+
+    console.log('청소년 시그널 최종 결과 타입:', maxType, '점수:', maxScore);
+    
+    if (!maxType) {
+      return null;
     }
     
     const types = {
@@ -128,7 +149,8 @@ const YouthSignalTest = () => {
       }
     };
 
-    return types[maxType] || types.S;
+    const resultData = types[maxType] || types.S;
+    return { ...resultData, maxType }; // maxType을 포함하여 반환
   };
 
   // 결과는 step이 'result'일 때만 계산
@@ -280,7 +302,7 @@ const YouthSignalTest = () => {
                     {Object.entries(scores).map(([key, val]) => (
                         <div key={key} className="flex flex-col items-center gap-1 w-1/4">
                             <span className="text-[10px] text-gray-400">{val}</span>
-                            <div className={`w-full rounded-t ${key === result.label[5] ? 'bg-[#d5b25a]' : 'bg-gray-800'}`} style={{height: `${(val/16)*100}%`}}></div>
+                            <div className={`w-full rounded-t ${key === result?.maxType ? 'bg-[#d5b25a]' : 'bg-gray-800'}`} style={{height: `${(val/16)*100}%`}}></div>
                             <span className="text-[10px] font-bold text-gray-500">{key}</span>
                         </div>
                     ))}
