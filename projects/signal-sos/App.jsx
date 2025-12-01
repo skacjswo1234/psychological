@@ -776,8 +776,24 @@ function QuestionSection({ qIdx, onNext, total, onPrev }) {
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const handleAnswerClick = (op, index) => {
+  // 질문이 변경될 때 포커스 제거
+  useEffect(() => {
+    if (document.activeElement && document.activeElement.blur) {
+      document.activeElement.blur();
+    }
+    // 또는 body에 포커스 이동
+    if (document.body && document.body.focus) {
+      document.body.focus();
+    }
+  }, [qIdx]);
+
+  const handleAnswerClick = (op, index, event) => {
     if (isProcessing) return; // 이미 처리 중이면 무시
+    
+    // 클릭한 버튼의 포커스 제거
+    if (event && event.currentTarget) {
+      event.currentTarget.blur();
+    }
     
     setSelectedIndex(index);
     setIsProcessing(true);
@@ -787,6 +803,10 @@ function QuestionSection({ qIdx, onNext, total, onPrev }) {
       onNext(op.type);
       setSelectedIndex(null);
       setIsProcessing(false);
+      // 다음 질문으로 넘어갈 때 포커스 제거
+      if (document.activeElement && document.activeElement.blur) {
+        document.activeElement.blur();
+      }
     }, 800);
   };
 
@@ -823,7 +843,7 @@ function QuestionSection({ qIdx, onNext, total, onPrev }) {
           return (
             <button
               key={i}
-              onClick={() => handleAnswerClick(op, i)}
+              onClick={(e) => handleAnswerClick(op, i, e)}
               disabled={isProcessing}
               className={`w-full text-left p-5 rounded-xl border transition-all group relative overflow-hidden
                 ${isSelected 
