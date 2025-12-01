@@ -700,7 +700,7 @@ function HeroSection({ onStart }) {
         </div>
 
         <h1 className="text-4xl md:text-6xl font-extrabold leading-tight text-white tracking-tight">
-          SOS 시그널 스캐너
+          36가지 데이터 SOS 스캐너
         </h1>
 
         <p className="text-gray-400 text-lg font-light leading-relaxed">
@@ -773,15 +773,31 @@ function InputSection({ name, setName, onNext }) {
 function QuestionSection({ qIdx, onNext, total, onPrev }) {
   const q = QUESTIONS[qIdx];
   const progress = ((qIdx + 1) / total) * 100;
+  const [selectedIndex, setSelectedIndex] = useState(null);
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const handleAnswerClick = (op, index) => {
+    if (isProcessing) return; // 이미 처리 중이면 무시
+    
+    setSelectedIndex(index);
+    setIsProcessing(true);
+    
+    // 선택 확인 후 800ms 딜레이로 다음 질문으로 이동
+    setTimeout(() => {
+      onNext(op.type);
+      setSelectedIndex(null);
+      setIsProcessing(false);
+    }, 800);
+  };
 
   return (
-    <div className="w-full max-w-xl animate-fade-in">
+    <div className="w-full max-w-2xl animate-fade-in px-4">
       <div className="mb-8">
         <div className="flex justify-between text-xs font-mono text-cyan-500 mb-2">
           <span>CASE FILE: Q{String(qIdx + 1).padStart(2, '0')}/Q{total}</span>
           <span>{Math.round(progress)}% ANALYZED</span>
         </div>
-        <div className="h-1 w-full bg-gray-800 rounded-full overflow-hidden">
+        <div className="h-1.5 w-full bg-gray-800 rounded-full overflow-hidden">
           <div
             className="h-full bg-cyan-500 transition-all duration-500"
             style={{ width: `${progress}%` }}
@@ -789,37 +805,62 @@ function QuestionSection({ qIdx, onNext, total, onPrev }) {
         </div>
       </div>
 
-      <div className="mb-8">
-        <div className="flex items-center gap-2 mb-2">
+      <div className="mb-10 bg-white/5 p-6 rounded-2xl border border-white/10 backdrop-blur-sm">
+        <div className="flex items-center gap-2 mb-4">
           <span className="text-purple-400 text-sm font-bold tracking-wider">{q.cat}</span>
-          <span className="text-xs text-gray-600 font-mono border border-gray-700 px-2 py-0.5 rounded">
+          <span className="text-xs text-gray-400 font-mono border border-gray-700 px-2 py-0.5 rounded">
             {q.code}
           </span>
         </div>
-        <h2 className="text-2xl md:text-3xl font-bold leading-snug break-keep">{q.q}</h2>
+        <h2 className="text-2xl md:text-3xl font-bold leading-relaxed break-keep text-white mb-2">
+          {q.q}
+        </h2>
       </div>
 
-      <div className="space-y-3">
-        {q.ops.map((op, i) => (
-          <button
-            key={i}
-            onClick={() => onNext(op.type)}
-            className="w-full text-left p-5 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-cyan-500 transition-all group relative overflow-hidden"
-          >
-            <div className="relative z-10">
-              <div className="font-bold text-lg text-white group-hover:text-cyan-400 transition-colors">
-                {op.t}
+      <div className="space-y-3 mb-8">
+        {q.ops.map((op, i) => {
+          const isSelected = selectedIndex === i;
+          return (
+            <button
+              key={i}
+              onClick={() => handleAnswerClick(op, i)}
+              disabled={isProcessing}
+              className={`w-full text-left p-5 rounded-xl border transition-all group relative overflow-hidden
+                ${isSelected 
+                  ? 'bg-cyan-500/20 border-cyan-500 shadow-lg shadow-cyan-500/30 scale-[1.02]' 
+                  : isProcessing
+                  ? 'opacity-50 cursor-not-allowed'
+                  : 'bg-white/5 border-white/10 hover:bg-white/10 hover:border-cyan-500/50'
+                }`}
+            >
+              <div className="relative z-10">
+                <div className={`font-bold text-lg transition-colors flex items-center gap-2
+                  ${isSelected ? 'text-cyan-300' : 'text-white group-hover:text-cyan-400'}
+                `}>
+                  {isSelected && <CheckCircle size={20} className="text-cyan-400" />}
+                  {op.t}
+                </div>
+                <div className={`text-sm mt-2 leading-relaxed
+                  ${isSelected ? 'text-gray-200' : 'text-gray-400'}
+                `}>
+                  {op.d}
+                </div>
               </div>
-              <div className="text-sm text-gray-400 mt-1">{op.d}</div>
-            </div>
-            <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-          </button>
-        ))}
+              {isSelected && (
+                <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-transparent"></div>
+              )}
+              {!isSelected && !isProcessing && (
+                <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              )}
+            </button>
+          );
+        })}
       </div>
 
       <button
         onClick={onPrev}
-        className="mt-8 text-gray-500 hover:text-white flex items-center justify-center gap-2 mx-auto transition-colors"
+        disabled={isProcessing}
+        className="text-gray-500 hover:text-white flex items-center justify-center gap-2 mx-auto transition-colors disabled:opacity-50"
       >
         <ArrowLeft size={16} /> 이전 단계
       </button>
@@ -870,8 +911,27 @@ function LoadingSection({ onComplete }) {
 function ResultReport({ typeKey, name, scores, onRestart }) {
   const result = RESULT_DATA[typeKey];
   const [showShare, setShowShare] = useState(false);
+  const [shareType, setShareType] = useState(''); // 'test' or 'result'
 
-  const handleCopy = () => {
+  const handleCopyTestLink = () => {
+    const testUrl = window.location.origin + window.location.pathname;
+    const text = `36가지 데이터 SOS 스캐너 테스트 우리아이도 해보기\n\n${testUrl}`;
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    document.body.appendChild(textArea);
+    textArea.select();
+    try {
+      document.execCommand('copy');
+      setShareType('test');
+      setShowShare(true);
+      setTimeout(() => setShowShare(false), 3000);
+    } catch (err) {
+      // ignore
+    }
+    document.body.removeChild(textArea);
+  };
+
+  const handleCopyResult = () => {
     const text = `[학생 SOS 시그널 스캐너 결과]\n이름: ${name}\n유형: ${result.name}\n\n"${result.desc}"\n\n36가지 데이터 SOS 스캔 결과 확인하기`;
     const textArea = document.createElement('textarea');
     textArea.value = text;
@@ -879,6 +939,7 @@ function ResultReport({ typeKey, name, scores, onRestart }) {
     textArea.select();
     try {
       document.execCommand('copy');
+      setShareType('result');
       setShowShare(true);
       setTimeout(() => setShowShare(false), 3000);
     } catch (err) {
@@ -987,18 +1048,24 @@ function ResultReport({ typeKey, name, scores, onRestart }) {
         </div>
       </div>
 
-      <div className="flex gap-4 justify-center">
+      <div className="flex flex-col sm:flex-row gap-3 justify-center">
         <button
           onClick={onRestart}
-          className="px-6 py-3 rounded-xl border border-gray-600 text-gray-300 hover:bg-white/10 font-bold flex items-center gap-2"
+          className="px-6 py-3 rounded-xl border border-gray-600 text-gray-300 hover:bg-white/10 font-bold flex items-center justify-center gap-2"
         >
           <ArrowLeft size={18} /> 다시하기
         </button>
         <button
-          onClick={handleCopy}
-          className="px-6 py-3 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold flex items-center gap-2 shadow-lg"
+          onClick={handleCopyTestLink}
+          className="px-6 py-3 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold flex items-center justify-center gap-2 shadow-lg"
         >
-          <Share2 size={18} /> 결과 공유하기
+          <Share2 size={18} /> 테스트 링크 공유
+        </button>
+        <button
+          onClick={handleCopyResult}
+          className="px-6 py-3 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold flex items-center justify-center gap-2 shadow-lg"
+        >
+          <Share2 size={18} /> 결과 공유
         </button>
       </div>
 
@@ -1006,7 +1073,9 @@ function ResultReport({ typeKey, name, scores, onRestart }) {
         <div className="fixed inset-0 flex items-center justify-center z-50 animate-fade-in bg-black/80">
           <div className="bg-gray-900 border border-cyan-500/50 p-6 rounded-2xl flex items-center gap-3 shadow-2xl">
             <CheckCircle className="text-cyan-400" />{' '}
-            <span className="font-bold text-white">결과 리포트가 복사되었습니다.</span>
+            <span className="font-bold text-white">
+              {shareType === 'test' ? '테스트 링크가 복사되었습니다.' : '결과 리포트가 복사되었습니다.'}
+            </span>
           </div>
         </div>
       )}
