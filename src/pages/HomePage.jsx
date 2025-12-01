@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Brain, Sparkles, ArrowRight, Radio } from 'lucide-react';
+import { Brain, Sparkles, ArrowRight, Radio, AlertTriangle } from 'lucide-react';
 import './HomePage.css';
 
 const HomePage = () => {
@@ -26,6 +26,17 @@ const HomePage = () => {
       borderColor: 'border-blue-500/30',
       textColor: 'text-blue-400',
       hoverColor: 'blue'
+    },
+    {
+      id: 'signal-sos',
+      title: 'SOS Signal Scanner',
+      subtitle: '학생 행동 시그널 분석 2',
+      description: '36가지 무의식 행동 데이터를 SOS 신호로 스캔하는 심층 리포트',
+      icon: <AlertTriangle className="w-8 h-8 text-red-500" />,
+      gradient: 'from-red-900/20 to-rose-800/10',
+      borderColor: 'border-red-500/30',
+      textColor: 'text-red-400',
+      hoverColor: 'red'
     }
   ];
 
