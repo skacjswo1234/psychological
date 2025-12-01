@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Brain, Sparkles, ArrowRight, Radio, Activity, Scale } from 'lucide-react';
+import { Brain, Sparkles, ArrowRight, Radio } from 'lucide-react';
 import './HomePage.css';
 
 const HomePage = () => {
@@ -26,28 +26,6 @@ const HomePage = () => {
       borderColor: 'border-blue-500/30',
       textColor: 'text-blue-400',
       hoverColor: 'blue'
-    },
-    {
-      id: 'youth-signal',
-      title: 'Youth Signal',
-      subtitle: '청소년 시그널 타입 테스트',
-      description: '16문항으로 청소년의 감정·행동 패턴을 4가지 타입으로 분석',
-      icon: <Activity className="w-8 h-8 text-amber-500" />,
-      gradient: 'from-amber-900/20 to-amber-800/10',
-      borderColor: 'border-amber-500/30',
-      textColor: 'text-amber-400',
-      hoverColor: 'amber'
-    },
-    {
-      id: 'adult-signal',
-      title: 'Adult Signal',
-      subtitle: '성인 시그널 타입 테스트',
-      description: '25문항으로 직장·관계·돈 속에서 나의 무의식 시그널을 분석',
-      icon: <Scale className="w-8 h-8 text-amber-600" />,
-      gradient: 'from-amber-900/20 to-amber-800/10',
-      borderColor: 'border-amber-600/30',
-      textColor: 'text-amber-500',
-      hoverColor: 'amber'
     }
   ];
 
@@ -90,12 +68,8 @@ const HomePage = () => {
                 <div className="ml-4">
                   {project.id === 'signal-oracle' ? (
                     <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-yellow-400 group-hover:translate-x-1 transition-all" />
-                  ) : project.id === 'signal-lab' ? (
-                    <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-blue-400 group-hover:translate-x-1 transition-all" />
-                  ) : project.id === 'youth-signal' ? (
-                    <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-amber-400 group-hover:translate-x-1 transition-all" />
                   ) : (
-                    <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-amber-500 group-hover:translate-x-1 transition-all" />
+                    <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-blue-400 group-hover:translate-x-1 transition-all" />
                   )}
                 </div>
               </div>
@@ -103,9 +77,7 @@ const HomePage = () => {
               {/* 호버 효과 */}
               <div className={`absolute inset-0 bg-gradient-to-r ${
                 project.id === 'signal-oracle' ? 'from-yellow-500/0 via-yellow-500/5 to-yellow-500/0' : 
-                project.id === 'signal-lab' ? 'from-blue-500/0 via-blue-500/5 to-blue-500/0' : 
-                project.id === 'youth-signal' ? 'from-amber-500/0 via-amber-500/5 to-amber-500/0' :
-                'from-amber-600/0 via-amber-600/5 to-amber-600/0'
+                'from-blue-500/0 via-blue-500/5 to-blue-500/0'
               } opacity-0 group-hover:opacity-100 transition-opacity duration-300`}></div>
             </Link>
           ))}
